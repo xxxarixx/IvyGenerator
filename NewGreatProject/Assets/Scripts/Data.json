@@ -1,0 +1,288 @@
+{
+    "purchases":[
+        {
+            "date_of_purchase": "2023-12-25",
+            "quantity": 77
+        },
+        {
+            "date_of_purchase": "2024-01-12",
+            "quantity": 99
+        },
+        {
+            "date_of_purchase": "2024-02-08",
+            "quantity": 8
+        },
+        {
+            "date_of_purchase": "2024-03-15",
+            "quantity": 23
+        },
+        {
+            "date_of_purchase": "2024-04-20",
+            "quantity": 65
+        },
+        {
+            "date_of_purchase": "2024-05-28",
+            "quantity": 42
+        },
+        {
+            "date_of_purchase": "2024-06-13",
+            "quantity": 3
+        },
+        {
+            "date_of_purchase": "2024-07-19",
+            "quantity": 51
+        },
+        {
+            "date_of_purchase": "2024-08-24",
+            "quantity": 9
+        },
+        {
+            "date_of_purchase": "2024-09-05",
+            "quantity": 100
+        },
+        {
+            "date_of_purchase": "2024-01-01",
+            "quantity": 56
+        },
+        {
+            "date_of_purchase": "2024-02-15",
+            "quantity": 32
+        },
+        {
+            "date_of_purchase": "2024-03-28",
+            "quantity": 78
+        },
+        {
+            "date_of_purchase": "2024-04-13",
+            "quantity": 12
+        },
+        {
+            "date_of_purchase": "2024-05-18",
+            "quantity": 89
+        },
+        {
+            "date_of_purchase": "2024-06-02",
+            "quantity": 45
+        },
+        {
+            "date_of_purchase": "2024-07-08",
+            "quantity": 2
+        },
+        {
+            "date_of_purchase": "2024-08-13",
+            "quantity": 76
+        },
+        {
+            "date_of_purchase": "2024-09-17",
+            "quantity": 34
+        },
+        {
+            "date_of_purchase": "2023-12-30",
+            "quantity": 87
+        },
+        {
+            "date_of_purchase": "2024-01-16",
+            "quantity": 11
+        },
+        {
+            "date_of_purchase": "2024-02-21",
+            "quantity": 63
+        },
+        {
+            "date_of_purchase": "2024-03-31",
+            "quantity": 4
+        },
+        {
+            "date_of_purchase": "2024-04-15",
+            "quantity": 98
+        },
+        {
+            "date_of_purchase": "2024-05-20",
+            "quantity": 57
+        },
+        {
+            "date_of_purchase": "2024-06-05",
+            "quantity": 33
+        },
+        {
+            "date_of_purchase": "2024-07-11",
+            "quantity": 88
+        },
+        {
+            "date_of_purchase": "2024-08-16",
+            "quantity": 1
+        },
+        {
+            "date_of_purchase": "2024-09-21",
+            "quantity": 66
+        },
+        {
+            "date_of_purchase": "2023-12-27",
+            "quantity": 22
+        },
+        {
+            "date_of_purchase": "2024-01-19",
+            "quantity": 75
+        },
+        {
+            "date_of_purchase": "2024-02-23",
+            "quantity": 48
+        },
+        {
+            "date_of_purchase": "2024-04-01",
+            "quantity": 6
+        },
+        {
+            "date_of_purchase": "2024-05-06",
+            "quantity": 97
+        },
+        {
+            "date_of_purchase": "2024-06-11",
+            "quantity": 38
+        },
+        {
+            "date_of_purchase": "2024-07-17",
+            "quantity": 55
+        },
+        {
+            "date_of_purchase": "2024-08-22",
+            "quantity": 10
+        },
+        {
+            "date_of_purchase": "2024-09-26",
+            "quantity": 73
+        },
+        {
+            "date_of_purchase": "2023-12-29",
+            "quantity": 86
+        },
+        {
+            "date_of_purchase": "2024-01-22",
+            "quantity": 100
+        },
+        {
+            "date_of_purchase": "2024-02-26",
+            "quantity": 71
+        },
+        {
+            "date_of_purchase": "2024-04-03",
+            "quantity": 14
+        },
+        {
+            "date_of_purchase": "2024-05-08",
+            "quantity": 96
+        },
+        {
+            "date_of_purchase": "2024-06-14",
+            "quantity": 41
+        },
+        {
+            "date_of_purchase": "2024-07-20",
+            "quantity": 58
+        },
+        {
+            "date_of_purchase": "2024-08-25",
+            "quantity": 11
+        },
+        {
+            "date_of_purchase": "2024-09-28",
+            "quantity": 81
+        },
+        {
+            "date_of_purchase": "2024-01-03",
+            "quantity": 59
+        },
+        {
+            "date_of_purchase": "2024-02-28",
+            "quantity": 35
+        },
+        {
+            "date_of_purchase": "2024-04-05",
+            "quantity": 91
+        },
+        {
+            "date_of_purchase": "2024-05-10",
+            "quantity": 62
+        },
+        {
+            "date_of_purchase": "2024-06-16",
+            "quantity": 37
+        },
+        {
+            "date_of_purchase": "2024-07-22",
+            "quantity": 54
+        },
+        {
+            "date_of_purchase": "2024-08-27",
+            "quantity": 13
+        },
+        {
+            "date_of_purchase": "2024-09-30",
+            "quantity": 84
+        },
+        {
+            "date_of_purchase": "2024-01-05",
+            "quantity": 61
+        },
+        {
+            "date_of_purchase": "2024-03-02",
+            "quantity": 36
+        },
+        {
+            "date_of_purchase": "2024-04-07",
+            "quantity": 93
+        },
+        {
+            "date_of_purchase": "2024-05-12",
+            "quantity": 64
+        },
+        {
+            "date_of_purchase": "2024-06-18",
+            "quantity": 39
+        },
+        {
+            "date_of_purchase": "2024-07-24",
+            "quantity": 53
+        },
+        {
+            "date_of_purchase": "2024-08-29",
+            "quantity": 15
+        },
+        {
+            "date_of_purchase": "2024-10-02",
+            "quantity": 83
+        },
+        {
+            "date_of_purchase": "2024-01-07",
+            "quantity": 60
+        },
+        {
+            "date_of_purchase": "2024-03-04",
+            "quantity": 31
+        },
+        {
+            "date_of_purchase": "2024-04-09",
+            "quantity": 90
+        },
+        {
+            "date_of_purchase": "2024-05-14",
+            "quantity": 67
+        },
+        {
+            "date_of_purchase": "2024-06-20",
+            "quantity": 40
+        },
+        {
+            "date_of_purchase": "2024-07-26",
+            "quantity": 52
+        },
+        {
+            "date_of_purchase": "2024-08-31",
+            "quantity": 17
+        },
+        {
+            "date_of_purchase": "2024-10-04",
+            "quantity": 82
+        }
+    ]
+}
