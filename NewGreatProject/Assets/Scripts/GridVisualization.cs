@@ -14,6 +14,9 @@ namespace HorizontalGraph
         public Color linesColor = Color.gray;
         public Color gridColor = Color.gray;
         public Color viewPortColor = Color.green;
+        public SmoothingType smoothing = SmoothingType.Bezier;
+        [Range(3,50)]
+        public int pointsPerCurve = 4;
         [Range(0.01f,1f)]
         public float gizSize;
         private List<Vector3> vis = new List<Vector3>();
@@ -24,7 +27,7 @@ namespace HorizontalGraph
         public void Visualize(List<Vector2> points)
         {
             //if(lastPoints.Count != points.Count)
-            vis = grid.GenerateGraph(points.ToArray(), timeOffset,maxRecordsToShow);
+            vis = grid.GenerateGraph(points.ToArray(), timeOffset, smoothing, maxRecordsToShow,pointsPerCurve: pointsPerCurve);
             lastPoints = points;
         }
         public void VisualizeLastVisualize()
@@ -41,7 +44,7 @@ namespace HorizontalGraph
             if (grid == null)
                 OnValidate();
             DrawGraphViewPort();
-            if (vis.Count == 0 || lastPoints.Count == 0)
+            if (vis  == null|| vis.Count == 0 || lastPoints.Count == 0)
                 return;
             DrawPoints();
         }
@@ -69,12 +72,16 @@ namespace HorizontalGraph
             Vector3 viewPortCenter = grid.startingPosition.position + (Vector3)grid.offset + new Vector3(vpWidth / 2, vpHeight / 2);
             float gridWidth = vpWidth / maxRecordsToShow;
             //grid
-            Gizmos.color = gridColor;
-            for (int i = 0; i < Mathf.Clamp(vis.Count, 0, maxRecordsToShow); i++)
+            if (vis != null && vis.Count > 0)
             {
-                Vector3 worldPosition = vis[i];
-                Gizmos.DrawWireCube(new Vector3(worldPosition.x + gridWidth / 2, viewPortCenter.y), new Vector3(gridWidth, vpHeight));
+                Gizmos.color = gridColor;
+                for (int i = 0; i < Mathf.Clamp(vis.Count, 0, maxRecordsToShow); i++)
+                {
+                    Vector3 worldPosition = vis[i];
+                    Gizmos.DrawWireCube(new Vector3(worldPosition.x + gridWidth / 2, viewPortCenter.y), new Vector3(gridWidth, vpHeight));
+                }
             }
+
             //viewPort
             Gizmos.color = viewPortColor;
             Gizmos.DrawWireCube(viewPortCenter, new Vector3(vpWidth,vpHeight));

@@ -175,7 +175,7 @@ MonoBehaviour:
   startingPosition: {fileID: 1664851889}
   offset: {x: 0.19, y: 0.08}
   gridSpacing: 0.41
-  maxHeight: 5.52
+  maxHeight: 5.28
   gridVisualization: {fileID: 377309039}
 --- !u!114 &377309039
 MonoBehaviour:
@@ -193,9 +193,11 @@ MonoBehaviour:
   linesColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   gridColor: {r: 0.103773594, g: 0.1013261, b: 0.1013261, a: 1}
   viewPortColor: {r: 0.062077247, g: 0.4245283, b: 0.062077247, a: 1}
-  gizSize: 0.055
-  maxRecordsToShow: 27
-  timeOffset: 1
+  smoothing: 0
+  pointsPerCurve: 3
+  gizSize: 0.01
+  maxRecordsToShow: 18
+  timeOffset: 0
 --- !u!114 &377309040
 MonoBehaviour:
   m_ObjectHideFlags: 0
