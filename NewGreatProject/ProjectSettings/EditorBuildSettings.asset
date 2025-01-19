@@ -6,6 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/GraphItAll.unity
+    path: Assets/Other/Scenes/GraphItAll.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: bdeafc3a56e25734f8174defe40d19d2, type: 3}
+  m_UseUCBPForAssetBundles: 0
