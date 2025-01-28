@@ -8,6 +8,7 @@ namespace Player
     {
         internal event Action<Vector2> OnMovementInputFixedUpdate;
         internal event Action OnMovementInputStart;
+        internal event Action OnPrimaryBtnStart;
 
         bool _isMoving;
         Vector2 _lastMoveDir;
@@ -19,16 +20,23 @@ namespace Player
         {
             _controller = new();
             _controller.Enable();
+
             _controller.Main.Movement.performed += ctx =>
             {
                 _isMoving = true;
                 _lastMoveDir = ctx.ReadValue<Vector2>();
                 OnMovementInputStart?.Invoke();
             };
+
             _controller.Main.Movement.canceled += ctx =>
             {
                 _isMoving = false;
                 _lastMoveDir = ctx.ReadValue<Vector2>();
+            };
+
+            _controller.Main.PrimaryBtn.performed += ctx =>
+            {
+                OnPrimaryBtnStart?.Invoke();
             };
         }
 

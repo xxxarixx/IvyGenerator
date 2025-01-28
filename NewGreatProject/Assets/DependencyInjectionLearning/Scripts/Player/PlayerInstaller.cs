@@ -1,6 +1,8 @@
 using Player;
 using UnityEngine;
+using Vines;
 using Zenject;
+
 class PlayerInstaller : MonoInstaller<PlayerInstaller>
 {
     [SerializeField]
@@ -10,8 +12,9 @@ class PlayerInstaller : MonoInstaller<PlayerInstaller>
     public override void InstallBindings()
     {
         Container.Bind<Rigidbody>().FromInstance(_rb).AsSingle();
-        Container.BindInterfacesAndSelfTo<PlayerInputSystem>().AsSingle();
         Container.Bind<Camera>().FromInstance(_cam);
         Container.BindInterfacesAndSelfTo<PlayerCameraSystem>().AsSingle();
+        Container.BindInterfacesAndSelfTo<PlayerInputSystem>().AsSingle();
+        Container.Bind<VinesSystem>().ToSelf().AsSingle();
     }
 }

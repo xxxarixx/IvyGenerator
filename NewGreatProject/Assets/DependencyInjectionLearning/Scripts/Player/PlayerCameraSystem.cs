@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +7,7 @@ namespace Player
     {
         [Inject]
         Camera _cam;
+        internal Vector3 CameraForward => _cam.transform.forward;
 
         internal Vector3 GetLookDir(Vector2 moveDir)
         {
@@ -16,5 +16,6 @@ namespace Player
 
             return (cameraForward * moveDir.y + cameraRight * moveDir.x).normalized;
         }
+
     }
 }

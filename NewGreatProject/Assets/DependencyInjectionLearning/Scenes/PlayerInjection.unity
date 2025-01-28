@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 237077174}
   - component: {fileID: 237077173}
   - component: {fileID: 237077172}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7338b03ca260f4aa64b3cfd87b8465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _head: {fileID: 2025928302}
 --- !u!54 &237077175
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -391,7 +392,7 @@ GameObject:
   m_Component:
   - component: {fileID: 556413941}
   - component: {fileID: 556413942}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -618,7 +619,6 @@ GameObject:
   - component: {fileID: 1110667326}
   - component: {fileID: 1110667325}
   - component: {fileID: 1110667324}
-  - component: {fileID: 1110667323}
   - component: {fileID: 1110667322}
   m_Layer: 0
   m_Name: FreeLook Camera
@@ -685,22 +685,6 @@ MonoBehaviour:
         DecelTime: 0
   PlayerIndex: -1
   AutoEnableInputs: 1
---- !u!114 &1110667323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1110667321}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a076c17fe76165e4f8ed21498b877bf9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Modifiers: []
-  references:
-    version: 2
-    RefIds: []
 --- !u!114 &1110667324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -962,7 +946,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2025928302}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}

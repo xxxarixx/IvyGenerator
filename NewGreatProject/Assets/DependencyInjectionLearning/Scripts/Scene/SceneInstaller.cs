@@ -1,6 +1,7 @@
 using Zenject;
 using UnityEngine;
 using Props;
+
 namespace DependencyLearn
 {
     class SceneInstaller : MonoInstaller<SceneInstaller>
