@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using Vines;
@@ -19,10 +20,17 @@ namespace Player
         readonly Rigidbody _rb;
         // Vines
         [Inject]
-        readonly VinesSystem _vinesSystem;
+        readonly VinesSystemPart2 _vinesSystem;
         LayerMask _vinesTarget = 1 << 0;
 
         Vector3 _visualizationPoint;
+
+        [SerializeField]
+        Transform origin;
+        [SerializeField]
+        Transform nextPoint;
+        [SerializeField]
+        Vector3 direction;
 
         void OnEnable()
         {
@@ -40,6 +48,28 @@ namespace Player
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        private void Update()
+        {
+            (bool, float) final = IsPointInDirection(origin.transform.position, direction, nextPoint.transform.position);
+            Debug.DrawRay(origin.transform.position, direction, Color.blue, duration: 0.01f);
+            Debug.Log($"IsPointInDirection: {final.Item1} ({final.Item2})");
+            _vinesSystem.Update();
+        }
+        private (bool,float) IsPointInDirection(Vector3 origin, Vector3 direction, Vector3 point)
+        {
+            // Calculate the vector from origin to the point
+            Vector3 toPoint = point - origin;
+
+            // Normalize the direction vector (if not already normalized)
+            direction = direction.normalized;
+
+            // Calculate the dot product
+            float dotProduct = Vector3.Dot(direction, toPoint.normalized);
+
+            // Check if the dot product is positive (point is in the same general direction)
+            return (dotProduct >= 0, dotProduct);
         }
 
         void OnDrawGizmos()
@@ -62,11 +92,10 @@ namespace Player
             var hit = ShootRaycastForward(5f, _vinesTarget);
             _visualizationPoint = hit.point;
             _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
-                                worldPosition:hit.point,
+                                shootOrigin:hit.point,
                                 normal:hit.normal, 
                                 targetMask:_vinesTarget);
         }
-
         RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
         {
             Physics.Raycast(_head.position, _vision.CameraForward, out RaycastHit hit, length, layerMask);
