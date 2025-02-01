@@ -300,8 +300,8 @@ MonoBehaviour:
     TimeBetweenSpawn: 0.1
     UpdateDebugMode: 0
     ManualCheckSegmentsCount: 6
+    OriginOffsetMultiplayer: 0.1
     SupportSphereGizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    DrawLineBetween: 0
 --- !u!114 &237077173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _head: {fileID: 2025928302}
+  lineRenderer: {fileID: 7542837}
   origin: {fileID: 1980135578}
   nextPoint: {fileID: 1571021575}
   direction: {x: 1, y: 0, z: 1}

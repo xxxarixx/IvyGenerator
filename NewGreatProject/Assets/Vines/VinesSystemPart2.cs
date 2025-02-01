@@ -33,6 +33,9 @@ namespace Vines
             internal int ManualCheckSegmentsCount = 4;
 
             [SerializeField]
+            internal float OriginOffsetMultiplayer = 1f;
+
+            [SerializeField]
             internal Color SupportSphereGizmosColor = Color.yellow;
         }
 
@@ -109,7 +112,7 @@ namespace Vines
             Debug.Log($"curv:{curvature} normal:{normal} prevNormal: {previousDirection}");
             // Adjust reflection angle 
             float adjustedSpacingAngle = Mathf.Lerp(0f, _settings.MaxSpacingAngle, (curvature * _settings.Spacing) / 180f);
-            float raycastDistance = _settings.Spacing * ((_settings.Spacing * 10) / _settings.MaxSpacingAngle);
+            float raycastDistance = _settings.Spacing * ((_settings.Spacing * 10) / _settings.MaxSpacingAngle) + _settings.OriginOffsetMultiplayer;
             Vector3 reflectionAngled = Vector3.Lerp(reflection, -directionToReflect, adjustedSpacingAngle);
             Debug.DrawRay(forwardPoint, reflectionAngled * raycastDistance, Color.magenta, _settings.DebugTimeFade);
             shootDirection = reflectionAngled;
@@ -117,7 +120,7 @@ namespace Vines
             
             if (Physics.Raycast(forwardPoint, reflectionAngled, out RaycastHit hit, raycastDistance, targetMask))
             {
-                shootOrigin = hit.point;
+                shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
                 normal = hit.normal;
                 _vines.Add(shootOrigin);
             }
@@ -133,8 +136,8 @@ namespace Vines
                     Debug.DrawRay(forwardPoint, reflectionAngled * raycastDistance, Color.magenta, _settings.DebugTimeFade);
                     if (Physics.Raycast(forwardPoint, reflectionAngled, out hit, raycastDistance, targetMask))
                     {
-                        shootOrigin = hit.point;
                         normal = hit.normal;
+                        shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
                         _vines.Add(shootOrigin);
                         shootDirection = reflectionAngled;
                         break;
