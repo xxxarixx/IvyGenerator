@@ -47,7 +47,6 @@ namespace Vines
         internal void Invoke(Vector3 shootDirection, Vector3 origin, Vector3 normal, LayerMask targetMask)
         {
             normal = normal.normalized;
-            Vector3 hitDirection = -normal;
             
             Debug.DrawRay(origin, normal, Color.yellow, _settings.DebugTimeFade);
             _vines.Clear();

@@ -21,6 +21,10 @@ namespace Player
         // Vines
         [Inject]
         readonly VinesSystemPart2 _vinesSystem;
+
+        [SerializeField]
+        LineRenderer lineRenderer;
+
         LayerMask _vinesTarget = 1 << 0;
 
         Vector3 _visualizationPoint;
@@ -94,7 +98,8 @@ namespace Player
             _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
                                 shootOrigin:hit.point,
                                 normal:hit.normal, 
-                                targetMask:_vinesTarget);
+                                targetMask:_vinesTarget,
+                                lineRenderer:lineRenderer);
         }
         RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
         {

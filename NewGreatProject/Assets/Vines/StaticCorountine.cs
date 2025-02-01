@@ -9,5 +9,7 @@ namespace Vines
         void Awake() { instance = this; }
         internal static void StartStaticCoruntine(IEnumerator routine) =>
             instance.StartCoroutine(routine);
+        internal static void StopStaticCoruntine(IEnumerator routine) =>
+          instance.StopCoroutine(routine);
     }
 }
