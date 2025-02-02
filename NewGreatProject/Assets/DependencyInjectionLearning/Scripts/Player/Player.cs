@@ -94,12 +94,15 @@ namespace Player
         void PrimaryBtnPressed()
         {
             var hit = ShootRaycastForward(5f, _vinesTarget);
-            _visualizationPoint = hit.point;
-            _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
-                                shootOrigin:hit.point,
-                                normal:hit.normal, 
-                                targetMask:_vinesTarget,
-                                lineRenderer:lineRenderer);
+            if(hit.collider != null)
+            {
+                _visualizationPoint = hit.point;
+                _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
+                                    shootOrigin:hit.point,
+                                    normal:hit.normal, 
+                                    targetMask:_vinesTarget,
+                                    lineRenderer:lineRenderer);
+            }
         }
         RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
         {

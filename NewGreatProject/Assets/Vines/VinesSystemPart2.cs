@@ -10,7 +10,7 @@ namespace Vines
         internal class Settings
         {
             [SerializeField]
-            internal float Spacing = 1f;
+            internal float Spacing = 0.45f;
 
             [SerializeField]
             [Range(0f,5f)]
@@ -41,9 +41,18 @@ namespace Vines
             internal float DirectionRandomizerStrength = 1f;
 
             [SerializeField]
-            internal float OriginRandomizerStrength = 1f;
+            float SpacingRandomizerStrength = 1f;
 
-            internal float RaycastDistance => Spacing * ((Spacing * 7) / MaxSpacingAngle) + OriginOffsetMultiplayer;
+            internal float RandomSpacing => Spacing + Random.Range(-SpacingRandomizerStrength, SpacingRandomizerStrength);
+
+            internal float RaycastDistance
+            {
+                get
+                {
+                    var randSpacing = RandomSpacing;
+                    return randSpacing * ((randSpacing * 7) / MaxSpacingAngle) + OriginOffsetMultiplayer;
+                }
+            }
         }
 
         internal VinesSystemPart2(Settings settings)
@@ -61,6 +70,7 @@ namespace Vines
         Vector3 lastNormal;
         LayerMask lastLayerMask;
         LineRenderer lastLineRenderer;
+        bool _vinesArePlaying;
         internal void Update()
         {
             if(_settings.UpdateDebugMode)
@@ -69,11 +79,14 @@ namespace Vines
 
         internal void Invoke(Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask, LineRenderer lineRenderer)
         {
+            if (_vinesArePlaying)
+                return;
+
             lastShootDir = shootDirection;
             lastOrigin = shootOrigin;
             lastNormal = normal;
             lastLayerMask = targetMask;
-            StaticCorountine.StopStaticCoruntine(ProcessVines(shootDirection, shootOrigin, normal, targetMask, lineRenderer));
+            _vinesArePlaying = true;
 
             normal = normal.normalized;
             _vines.Clear();
@@ -88,18 +101,21 @@ namespace Vines
         {
             Vector3? previousDirection = null;
             Vector3 previousNormal = normal;
+            float spacing = _settings.Spacing;
             for (int i = 0; i < _settings.IterationCount; i++)
             {
-                PopulatePoint(ref shootDirection, ref shootOrigin, ref normal, ref previousDirection, targetMask);
-                RandomizePoint(ref shootDirection, ref shootOrigin, normal);
+                PopulatePoint(ref shootDirection, ref shootOrigin, ref normal, ref previousDirection, ref spacing, targetMask);
+                RandomizePoint(ref shootDirection, ref spacing);
                 VisualizePoint(_vines.Count - 1,shootOrigin, lineRenderer);
                 InBetweenPoint(shootOrigin, ref previousNormal,normal,lineRenderer, targetMask);
+                previousNormal = normal;
                 yield return new WaitForSeconds(_settings.TimeBetweenSpawn);
             }
+            _vinesArePlaying = false;
             yield return null;
         }
 
-        void PopulatePoint(ref Vector3 shootDirection, ref Vector3 shootOrigin, ref Vector3 normal, ref Vector3? previousDirection, LayerMask targetMask)
+        void PopulatePoint(ref Vector3 shootDirection, ref Vector3 shootOrigin, ref Vector3 normal, ref Vector3? previousDirection, ref float Spacing, LayerMask targetMask)
         {
             // Correctly project the current direction onto the tangent plane
             Vector3 projectedForward = Vector3.ProjectOnPlane(shootDirection, normal).normalized;
@@ -108,12 +124,25 @@ namespace Vines
                 previousDirection = shootDirection;
 
             // Calculate the forward point on the surface
-            Vector3 forwardPoint = shootOrigin + normal * _settings.Spacing + projectedForward * _settings.Spacing;
-            _debugPoints.Add(forwardPoint);
+            Vector3 forwardPointOrigin = shootOrigin + normal * Spacing + projectedForward * Spacing;
+
+            // Check if ray to debug point has any obstacle, check in order to prevent going through obstacle.
+            if(Physics.Raycast(shootOrigin, (forwardPointOrigin - shootOrigin).normalized, out RaycastHit hit, Vector3.Distance(shootOrigin,forwardPointOrigin), targetMask))
+            {
+                normal = hit.normal;
+                shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
+                _vines.Add(shootOrigin);
+                return;
+            }
+            else
+            {
+                _debugPoints.Add(forwardPointOrigin);
+            }
+
             Debug.DrawRay(shootOrigin, projectedForward, Color.red, _settings.DebugTimeFade);
 
             // Calculate reflection direction and make reflection
-            Vector3 directionToReflect = (forwardPoint - shootOrigin).normalized;
+            Vector3 directionToReflect = (forwardPointOrigin - shootOrigin).normalized;
             Debug.DrawRay(shootOrigin, directionToReflect, Color.white, _settings.DebugTimeFade);
             Vector3 reflection = Vector3.Reflect(directionToReflect, normal);
 
@@ -122,16 +151,16 @@ namespace Vines
             previousDirection = shootDirection;
             Debug.Log($"curv:{curvature} normal:{normal} prevNormal: {previousDirection}");
             // Adjust reflection angle 
-            float adjustedSpacingAngle = Mathf.Lerp(0f, _settings.MaxSpacingAngle, (curvature * _settings.Spacing) / 180f);
+            float adjustedSpacingAngle = Mathf.Lerp(0f, _settings.MaxSpacingAngle, (curvature * Spacing) / 180f);
             Vector3 reflectionAngled = Vector3.Lerp(reflection, -directionToReflect, adjustedSpacingAngle);
-            Debug.DrawRay(forwardPoint, reflectionAngled * _settings.RaycastDistance, Color.magenta, _settings.DebugTimeFade);
+            Debug.DrawRay(forwardPointOrigin, reflectionAngled * _settings.RaycastDistance, Color.magenta, _settings.DebugTimeFade);
             shootDirection = reflectionAngled;
             
             
-            if (Physics.Raycast(forwardPoint, reflectionAngled, out RaycastHit hit, _settings.RaycastDistance, targetMask))
+            if (Physics.Raycast(forwardPointOrigin, reflectionAngled, out hit, _settings.RaycastDistance, targetMask))
             {
-                shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
                 normal = hit.normal;
+                shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
                 _vines.Add(shootOrigin);
             }
             else
@@ -143,8 +172,8 @@ namespace Vines
                 {
                     Debug.Log($"decreaseValue: {increaseValue} i:{i}");
                     reflectionAngled = Vector3.Lerp(reflection, -directionToReflect, i);
-                    Debug.DrawRay(forwardPoint, reflectionAngled * _settings.RaycastDistance, Color.magenta, _settings.DebugTimeFade);
-                    if (Physics.Raycast(forwardPoint, reflectionAngled, out hit, _settings.RaycastDistance, targetMask))
+                    Debug.DrawRay(forwardPointOrigin, reflectionAngled * _settings.RaycastDistance, Color.magenta, _settings.DebugTimeFade);
+                    if (Physics.Raycast(forwardPointOrigin, reflectionAngled, out hit, _settings.RaycastDistance, targetMask))
                     {
                         normal = hit.normal;
                         shootOrigin = hit.point + normal * _settings.OriginOffsetMultiplayer;
@@ -159,10 +188,10 @@ namespace Vines
             
         }
 
-        void RandomizePoint(ref Vector3 shootDirection, ref Vector3 shootOrigin, Vector3 normal)
+        void RandomizePoint(ref Vector3 shootDirection, ref float Spacing)
         {
             shootDirection += new Vector3(Random.Range(-_settings.DirectionRandomizerStrength, _settings.DirectionRandomizerStrength), Random.Range(-_settings.DirectionRandomizerStrength, _settings.DirectionRandomizerStrength), Random.Range(-_settings.DirectionRandomizerStrength, _settings.DirectionRandomizerStrength));
-            shootOrigin += new Vector3(Random.Range(-_settings.OriginRandomizerStrength, _settings.OriginRandomizerStrength), Random.Range(-_settings.OriginRandomizerStrength, _settings.OriginRandomizerStrength), Random.Range(-_settings.OriginRandomizerStrength, _settings.OriginRandomizerStrength));
+            Spacing = _settings.RandomSpacing;
         }
 
         void VisualizePoint(int index,Vector3 shootOrigin,LineRenderer lineRenderer)
@@ -176,7 +205,7 @@ namespace Vines
             if (_vines.Count < 2)
                 return;
 
-            Vector3 previousShootOrigin = _vines[_vines.Count - 2];
+            Vector3 previousShootOrigin = _vines[^2];
 
             Vector3 directionToPreviousOrigin = (previousShootOrigin - shootOrigin).normalized;
 
@@ -193,7 +222,8 @@ namespace Vines
                     previousNormal = hit.normal;
                     _vines.Insert(_vines.Count - 2, newPointShootOrigin);
                     VisualizePoint(_vines.Count - 2, newPointShootOrigin, lineRenderer);
-                    VisualizePoint(_vines.Count - 1, _vines[_vines.Count - 1], lineRenderer);
+                    VisualizePoint(_vines.Count - 1, _vines[^1], lineRenderer);
+                    Debug.Log($"inbetweenPoint generated at: {_vines.Count - 2}");
                 }
             }
         }

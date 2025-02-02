@@ -293,17 +293,17 @@ MonoBehaviour:
   _cam: {fileID: 666241671}
   _rb: {fileID: 237077175}
   _settings:
-    Spacing: 0.36
+    Spacing: 0.45
     MaxSpacingAngle: 1.642
-    IterationCount: 10
-    DebugTimeFade: 8.64
+    IterationCount: 30
+    DebugTimeFade: 2
     TimeBetweenSpawn: 0.1
     UpdateDebugMode: 0
-    ManualCheckSegmentsCount: 6
+    ManualCheckSegmentsCount: 8
     OriginOffsetMultiplayer: 0.1
     SupportSphereGizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    DirectionRandomizerStrength: 0.05
-    OriginRandomizerStrength: 0.1
+    DirectionRandomizerStrength: 0.5
+    SpacingRandomizerStrength: 0.3
 --- !u!114 &237077173
 MonoBehaviour:
   m_ObjectHideFlags: 0
