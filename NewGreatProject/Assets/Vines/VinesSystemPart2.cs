@@ -43,6 +43,9 @@ namespace Vines
             [SerializeField]
             float SpacingRandomizerStrength = 1f;
 
+            [SerializeField]
+            internal LineRenderer LineRendererPrefab;
+
             internal float RandomSpacing => Spacing + Random.Range(-SpacingRandomizerStrength, SpacingRandomizerStrength);
 
             internal float RaycastDistance
@@ -69,31 +72,33 @@ namespace Vines
         Vector3 lastOrigin;
         Vector3 lastNormal;
         LayerMask lastLayerMask;
-        LineRenderer lastLineRenderer;
+        LineRenderer? lastLineRenderer;
         bool _vinesArePlaying;
         internal void Update()
         {
             if(_settings.UpdateDebugMode)
-                Invoke(lastShootDir, lastOrigin, lastNormal, lastLayerMask, lastLineRenderer);
+                Invoke(lastShootDir, lastOrigin, lastNormal, lastLayerMask);
         }
 
-        internal void Invoke(Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask, LineRenderer lineRenderer)
+        internal void Invoke(Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask)
         {
             if (_vinesArePlaying)
                 return;
+
 
             lastShootDir = shootDirection;
             lastOrigin = shootOrigin;
             lastNormal = normal;
             lastLayerMask = targetMask;
             _vinesArePlaying = true;
+            CreateLineRenderer();
 
             normal = normal.normalized;
             _vines.Clear();
             _debugPoints.Clear();
             Debug.DrawRay(shootOrigin, normal, Color.yellow, _settings.DebugTimeFade);
             Debug.DrawRay(shootOrigin, -shootDirection, Color.black, _settings.DebugTimeFade);
-            StaticCorountine.StartStaticCoruntine(ProcessVines(shootDirection,shootOrigin,normal,targetMask, lineRenderer));
+            StaticCorountine.StartStaticCoruntine(ProcessVines(shootDirection,shootOrigin,normal,targetMask, lastLineRenderer));
 
         }
 
@@ -113,6 +118,14 @@ namespace Vines
             }
             _vinesArePlaying = false;
             yield return null;
+        }
+
+        void CreateLineRenderer()
+        {
+            if (lastLineRenderer != null)
+                return;
+
+            lastLineRenderer = GameObject.Instantiate(_settings.LineRendererPrefab, Vector3.zero, Quaternion.identity);
         }
 
         void PopulatePoint(ref Vector3 shootDirection, ref Vector3 shootOrigin, ref Vector3 normal, ref Vector3? previousDirection, ref float Spacing, LayerMask targetMask)
@@ -149,7 +162,6 @@ namespace Vines
             // Adjust SpacingAngle based on curvature
             float curvature = Vector3.Angle(shootDirection, previousDirection.Value);
             previousDirection = shootDirection;
-            Debug.Log($"curv:{curvature} normal:{normal} prevNormal: {previousDirection}");
             // Adjust reflection angle 
             float adjustedSpacingAngle = Mathf.Lerp(0f, _settings.MaxSpacingAngle, (curvature * Spacing) / 180f);
             Vector3 reflectionAngled = Vector3.Lerp(reflection, -directionToReflect, adjustedSpacingAngle);
@@ -170,7 +182,6 @@ namespace Vines
                 // Manual check needed, propably low poly
                 while (i < 0.9f)
                 {
-                    Debug.Log($"decreaseValue: {increaseValue} i:{i}");
                     reflectionAngled = Vector3.Lerp(reflection, -directionToReflect, i);
                     Debug.DrawRay(forwardPointOrigin, reflectionAngled * _settings.RaycastDistance, Color.magenta, _settings.DebugTimeFade);
                     if (Physics.Raycast(forwardPointOrigin, reflectionAngled, out hit, _settings.RaycastDistance, targetMask))
@@ -220,7 +231,7 @@ namespace Vines
                 {
                     Vector3 newPointShootOrigin = hit.point;
                     previousNormal = hit.normal;
-                    _vines.Insert(_vines.Count - 2, newPointShootOrigin);
+                    _vines.Insert(_vines.Count - 1, newPointShootOrigin);
                     VisualizePoint(_vines.Count - 2, newPointShootOrigin, lineRenderer);
                     VisualizePoint(_vines.Count - 1, _vines[^1], lineRenderer);
                     Debug.Log($"inbetweenPoint generated at: {_vines.Count - 2}");

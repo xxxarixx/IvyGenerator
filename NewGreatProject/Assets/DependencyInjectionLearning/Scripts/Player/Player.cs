@@ -1,5 +1,4 @@
-using DG.Tweening;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using Vines;
 using Zenject;
@@ -100,8 +99,7 @@ namespace Player
                 _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
                                     shootOrigin:hit.point,
                                     normal:hit.normal, 
-                                    targetMask:_vinesTarget,
-                                    lineRenderer:lineRenderer);
+                                    targetMask:_vinesTarget);
             }
         }
         RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
