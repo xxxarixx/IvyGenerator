@@ -58,9 +58,18 @@ namespace Vines
             }
         }
 
-        internal VinesSystemPart2(Settings settings)
+        internal VinesSystemPart2(Settings settings, Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask)
         {
             _settings = settings;
+            ChangeValues(shootDirection, shootOrigin, normal, targetMask);
+        }
+
+        internal void ChangeValues(Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask)
+        {
+            lastShootDir = shootDirection;
+            lastShootOrigin = shootOrigin;
+            lastNormal = normal;
+            lastLayerMask = targetMask;
         }
 
         Settings _settings;
@@ -69,7 +78,7 @@ namespace Vines
         List<Vector3> _debugPoints = new();
 
         Vector3 lastShootDir;
-        Vector3 lastOrigin;
+        Vector3 lastShootOrigin;
         Vector3 lastNormal;
         LayerMask lastLayerMask;
         LineRenderer? lastLineRenderer;
@@ -77,28 +86,22 @@ namespace Vines
         internal void Update()
         {
             if(_settings.UpdateDebugMode)
-                Invoke(lastShootDir, lastOrigin, lastNormal, lastLayerMask);
+                Invoke();
         }
 
-        internal void Invoke(Vector3 shootDirection, Vector3 shootOrigin, Vector3 normal, LayerMask targetMask)
+        internal void Invoke()
         {
             if (_vinesArePlaying)
                 return;
-
-
-            lastShootDir = shootDirection;
-            lastOrigin = shootOrigin;
-            lastNormal = normal;
-            lastLayerMask = targetMask;
             _vinesArePlaying = true;
             CreateLineRenderer();
 
-            normal = normal.normalized;
+            lastNormal = lastNormal.normalized;
             _vines.Clear();
             _debugPoints.Clear();
-            Debug.DrawRay(shootOrigin, normal, Color.yellow, _settings.DebugTimeFade);
-            Debug.DrawRay(shootOrigin, -shootDirection, Color.black, _settings.DebugTimeFade);
-            StaticCorountine.StartStaticCoruntine(ProcessVines(shootDirection,shootOrigin,normal,targetMask, lastLineRenderer));
+            Debug.DrawRay(lastShootOrigin, lastNormal, Color.yellow, _settings.DebugTimeFade);
+            Debug.DrawRay(lastShootOrigin, -lastShootDir, Color.black, _settings.DebugTimeFade);
+            StaticCorountine.StartStaticCoruntine(ProcessVines(lastShootDir, lastShootOrigin, lastNormal, lastLayerMask, lastLineRenderer));
 
         }
 

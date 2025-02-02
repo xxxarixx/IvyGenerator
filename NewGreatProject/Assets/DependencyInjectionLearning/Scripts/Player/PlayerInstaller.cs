@@ -17,6 +17,6 @@ class PlayerInstaller : MonoInstaller<PlayerInstaller>
         Container.Bind<Camera>().FromInstance(_cam);
         Container.BindInterfacesAndSelfTo<PlayerCameraSystem>().AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerInputSystem>().AsSingle();
-        Container.Bind<VinesSystemPart2>().FromInstance(new VinesSystemPart2(_settings)).AsSingle();
+        Container.Bind<VineController>().FromInstance(new VineController(_settings)).AsSingle();
     }
 }

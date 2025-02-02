@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Vines;
 using Zenject;
@@ -19,7 +18,7 @@ namespace Player
         readonly Rigidbody _rb;
         // Vines
         [Inject]
-        readonly VinesSystemPart2 _vinesSystem;
+        readonly VineController _vinesController;
 
         [SerializeField]
         LineRenderer lineRenderer;
@@ -58,7 +57,7 @@ namespace Player
             (bool, float) final = IsPointInDirection(origin.transform.position, direction, nextPoint.transform.position);
             Debug.DrawRay(origin.transform.position, direction, Color.blue, duration: 0.01f);
             Debug.Log($"IsPointInDirection: {final.Item1} ({final.Item2})");
-            _vinesSystem.Update();
+            _vinesController.Update();
         }
         private (bool,float) IsPointInDirection(Vector3 origin, Vector3 direction, Vector3 point)
         {
@@ -81,7 +80,7 @@ namespace Player
                 return;
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(_visualizationPoint, 0.1f);
-            _vinesSystem.GizmosDebug();
+            _vinesController.GizmosDebug();
         }
 
         void MovementInputFixedUpdate(Vector2 moveDir)
@@ -96,10 +95,17 @@ namespace Player
             if(hit.collider != null)
             {
                 _visualizationPoint = hit.point;
-                _vinesSystem.Invoke(shootDirection:_vision.CameraForward,
-                                    shootOrigin:hit.point,
-                                    normal:hit.normal, 
-                                    targetMask:_vinesTarget);
+                _vinesController.AddVine(index:0,
+                                         shootDirection:_vision.CameraForward,
+                                         shootOrigin:hit.point,
+                                         normal:hit.normal, 
+                                         targetMask:_vinesTarget);
+                _vinesController.AddVine(index: 1,
+                                         shootDirection: _vision.CameraForward,
+                                         shootOrigin: hit.point + Vector3.right * 2f,
+                                         normal: hit.normal,
+                                         targetMask: _vinesTarget);
+                _vinesController.StartVines();
             }
         }
         RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
