@@ -302,6 +302,8 @@ MonoBehaviour:
     ManualCheckSegmentsCount: 6
     OriginOffsetMultiplayer: 0.1
     SupportSphereGizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    DirectionRandomizerStrength: 0.05
+    OriginRandomizerStrength: 0.1
 --- !u!114 &237077173
 MonoBehaviour:
   m_ObjectHideFlags: 0
