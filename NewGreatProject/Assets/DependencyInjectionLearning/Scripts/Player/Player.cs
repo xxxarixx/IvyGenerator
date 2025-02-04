@@ -6,8 +6,7 @@ namespace Player
 {
     class Player : MonoBehaviour
     {
-        [SerializeField]
-        Transform _head;
+        
         [Inject]
         readonly PlayerInputSystem _input;
         [Inject]
@@ -19,13 +18,11 @@ namespace Player
         // Vines
         [Inject]
         readonly VineController _vinesController;
-
+        [Inject]
+        readonly PlayerWeaponHolderSystem _weaponHolderSystem;
+        LayerMask shootTarget = 1 << 0;
         [SerializeField]
-        LineRenderer lineRenderer;
-
-        LayerMask _vinesTarget = 1 << 0;
-
-        Vector3 _visualizationPoint;
+        Transform _head;
 
         [SerializeField]
         Transform origin;
@@ -78,10 +75,11 @@ namespace Player
         {
             if (!Application.isPlaying)
                 return;
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_visualizationPoint, 0.1f);
+
             _vinesController.GizmosDebug();
+            _weaponHolderSystem.Gizmos();
         }
+       
 
         void MovementInputFixedUpdate(Vector2 moveDir)
         {
@@ -91,25 +89,13 @@ namespace Player
 
         void PrimaryBtnPressed()
         {
-            var hit = ShootRaycastForward(5f, _vinesTarget);
-            if(hit.collider != null)
-            {
-                _visualizationPoint = hit.point;
-                _vinesController.AddVine(index:0,
-                                         shootDirection:_vision.CameraForward,
-                                         shootOrigin:hit.point,
-                                         normal:hit.normal, 
-                                         targetMask:_vinesTarget);
-                _vinesController.AddVine(index: 1,
-                                         shootDirection: _vision.CameraForward,
-                                         shootOrigin: hit.point + Vector3.right * 2f,
-                                         normal: hit.normal,
-                                         targetMask: _vinesTarget);
-                _vinesController.StartVines();
-            }
+            RaycastHit hit = ShootRaycastForward(5f, shootTarget);
+            if (hit.collider != null)
+                _weaponHolderSystem.Fire(_vision.CameraForward,hit);
         }
-        RaycastHit ShootRaycastForward(float length,LayerMask layerMask)
+        RaycastHit ShootRaycastForward(float length, LayerMask layerMask)
         {
+            Debug.Log($"head:{_head}, vision:{_vision}");
             Physics.Raycast(_head.position, _vision.CameraForward, out RaycastHit hit, length, layerMask);
             return hit;
         }
