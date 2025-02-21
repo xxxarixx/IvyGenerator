@@ -158,7 +158,7 @@ MonoBehaviour:
     MaxSpacingAngle: 1.642
     IterationCount: 30
     DebugTimeFade: 0
-    TimeBetweenSpawn: 0.1
+    TimeBetweenSpawn: 0.13
     UpdateDebugMode: 0
     ManualCheckSegmentsCount: 8
     OriginOffsetMultiplayer: 0.1
