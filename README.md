@@ -14,7 +14,7 @@ Repeat that process for many times and you will get resoult that is represented 
 :heavy_check_mark: Ivy avoidance clipping into mesh <br>
 :heavy_check_mark: First visualization demo <br>
 - [ ] Ivy using 3D line renderer (when I finish doing 3D line renderer)
-- [ ] Optimalisation using Unity Jobs
+- [ ] Optimalisation using Unity Jobs and Advanced Mesh API with Multi-Stream Approach, <a href="https://catlikecoding.com/unity/tutorials/procedural-meshes/creating-a-mesh/">great blog about that</a>
 - [ ] Show ball throwing and from ball impact create vines
 - [ ] VFX's
 - [ ] Shaders for better visuals
