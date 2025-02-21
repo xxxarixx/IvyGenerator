@@ -31,4 +31,4 @@ class PlayerInstaller : MonoInstaller<PlayerInstaller>
         Container.BindInterfacesAndSelfTo<PlayerCameraSystem>().AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerInputSystem>().AsSingle();
     }
-}
+}   
